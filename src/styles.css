@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Glitten';
+    src: url('https://res.cloudinary.com/dzbtekjvl/raw/upload/v1739525607/glitten.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* Terapkan font ke body atau elemen tertentu */
+  .glitten {
+    font-family: 'Glitten', sans-serif;
+  }
+  
