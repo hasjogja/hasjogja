@@ -1,14 +1,14 @@
 <!-- Katalog Produk -->
-<section class="bg-gray-100 py-16">
-  <div class="container mx-auto">
+<section class="bg-[#edeae6] py-16">
+  <div class="container mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-8 font-glitten">Katalog Produk</h2>
 
     <!-- Grid Produk -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-      @for (product of products; track product) {
-        <div class="bg-white p-4 shadow rounded-lg">
-          <img [src]="product['Url Gambar']" alt="{{ product['Nama Produk'] }}" class="h-48 w-full object-cover rounded-lg">
-          <p class="text-center mt-3 text-lg font-medium font-glitten">{{ product.ID }}</p>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      @for (product of products; track product.id) {
+        <div class="bg-white p-4 shadow rounded-lg cursor-pointer" (click)="openModal(product)">
+          <img [src]="product.images[0]" alt="{{ product.name }}" class="h-40 md:h-48 w-full object-cover rounded-lg">
+          <p class="text-center mt-3 text-base md:text-lg font-medium font-glitten">{{ product.name }}</p>
         </div>
       }
     </div>
@@ -17,14 +17,12 @@
     @if (!allLoaded || page >= 2) {
       <div class="text-center mt-8 flex justify-center gap-4">
         @if (!allLoaded) {
-          <button (click)="loadProducts()" class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600">
+          <button (click)="loadProducts()" class="bg-[#351C15]/70 text-white px-6 py-3 rounded-full shadow-md hover:bg-[#351C15]">
             {{ isLoading ? 'Memuat...' : 'Muat Lebih Banyak' }}
           </button>
         }
         @if (page >= 2) {
-          <button 
-            (click)="scrollToTop()" 
-            class="bg-gray-900/50 text-white px-3 py-2 rounded-full shadow-md hover:bg-gray-900 transition">
+          <button (click)="scrollToTop()" class="bg-gray-900/50 text-white px-3 py-2 rounded-full shadow-md hover:bg-gray-900 transition">
             ⬆
           </button>
         }
@@ -32,3 +30,77 @@
     }
   </div>
 </section>
+
+<!-- Modal Detail Produk -->
+@if (isModalOpen) {
+  <div class="fixed inset-0 bg-white/80 flex justify-center items-center z-50 p-1">
+    <div class="bg-white w-full max-w-4xl p-6 md:p-10 rounded-lg shadow-md relative flex flex-col md:flex-row">
+      <!-- Kolom Gambar Produk -->
+      <div class="w-full md:w-1/2 flex flex-col items-center">
+        <img [src]="selectedImage" alt="{{ selectedProduct?.name }}" class="h-60 w-full object-contain rounded-lg">
+
+        <!-- Galeri Thumbnail -->
+        <div class="flex gap-2 mt-4">
+          @for (img of selectedProduct?.images; track $index) {
+            <img [src]="img" alt="Thumbnail" class="h-12 w-12 md:h-16 md:w-16 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-gray-400" (click)="selectedImage = img">
+          }
+        </div>
+      </div>
+
+      <!-- Kolom Detail Produk -->
+      <div class="w-full md:w-1/2 pl-4 md:pl-6 flex flex-col">
+        <h2 class="text-lg md:text-2xl font-bold">{{ selectedProduct?.name }}</h2>
+
+        <div class="mt-3 space-y-2 text-sm md:text-base">
+          <p><strong>Material:</strong> {{ selectedProduct?.material }}</p>
+          <p><strong>Size:</strong> {{ selectedProduct?.size }}</p>
+          <p><strong>Colors:</strong> {{ selectedProduct?.colors }} Available</p>
+          <p><strong>Packaging:</strong> {{ selectedProduct?.packaging }}</p>
+          <p><strong>Add-Ons:</strong> {{ selectedProduct?.addOns }}</p>
+        </div>
+
+        <div class="mt-3">
+          <p class="text-gray-600 text-xs md:text-sm italic">{{ selectedProduct?.notes }}</p>
+        </div>
+
+        <!-- Harga Produk -->
+        <div class="mt-4 space-y-1">
+          <p class="text-lg md:text-xl font-bold text-green-600">Rp {{ selectedProduct?.basePrice }}</p>
+        </div>
+
+        <!-- Harga Berdasarkan Jumlah -->
+        <div class="mt-3">
+          <p class="font-semibold text-sm md:text-base">Harga Grosir:</p>
+          <div class="grid grid-cols-2 gap-2 text-xs md:text-sm">
+            <p>100 - 399 pcs: Rp {{ selectedProduct?.price100 }}</p>
+            <p>400 - 699 pcs: Rp {{ selectedProduct?.price400 }}</p>
+            <p>700 - 999 pcs: Rp {{ selectedProduct?.price700 }}</p>
+            <p>1000+ pcs: Rp {{ selectedProduct?.price1000 }}</p>
+          </div>
+        </div>
+
+        <!-- Harga Add-Ons -->
+        <div class="mt-3">
+          <p class="font-semibold text-sm md:text-base">Harga Add-Ons:</p>
+          <p>Label: Rp {{ selectedProduct?.priceLabel }}</p>
+          <p>Printing: Rp {{ selectedProduct?.pricePrinting }}</p>
+          <p>Thanks Card: Rp {{ selectedProduct?.priceThanksCard }}</p>
+        </div>
+
+        <!-- Tombol Pesan via WhatsApp & Tutup -->
+        <div class="mt-4 flex flex-col md:flex-row gap-3">
+          <a [href]="'https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20produk%20' + encodeText(selectedProduct?.name)" 
+   target="_blank"
+   class="bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow hover:bg-green-700 flex-1 text-center">
+   Pesan via WhatsApp
+</a>
+
+          
+          <button (click)="closeModal()" class="bg-red-200/50 text-red-600 sm:px-6 py-2 sm:py-3 rounded-lg shadow font-semibold hover:underline text-center flex-1">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
