@@ -20,7 +20,7 @@
   <!-- Gambar Carousel -->
   <div class="flex transition-transform duration-500" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
     <div *ngFor="let imgw of images">
-      <img [src]="imgw.imageUrl" [alt]="imgw.imageAlt" class="w-full h-40 sm:h-72 object-cover"/>
+      <img [src]="imgw.imageUrl" [alt]="imgw.imageAlt" class="w-full h-40 sm:h-72 object-contain"/>
     </div>
   </div>
 
@@ -69,62 +69,72 @@
     <app-katalog></app-katalog>
   
     <!-- Footer -->
-    <footer class="bg-[#ffa45b] shadow-sm mt-auto">
-      <div class="w-full max-w-screen-xl mx-auto p-5 sm:p-8">
-        <div class="flex flex-col sm:flex-row sm:justify-between items-center text-center sm:text-left">
-          <!-- Logo & Nama Brand -->
-          <div class="flex flex-col items-center sm:items-start space-y-2 sm:space-y-0">
-            <img src="https://res.cloudinary.com/dzbtekjvl/image/upload/v1739772278/HAS_logo_qqmiz0.png" class="h-8" alt="Brand Logo" />
-            <span class="text-lg sm:text-2xl font-medium font-glitten">Bag & Souvenir</span>
-            <span class="text-lg sm:text-2xl font-medium font-glitten">Production House</span>
-          </div>
-  
-          <!-- Alamat -->
-          <p class="text-sm sm:text-base text-black  mt-4 sm:mt-0">
-            Jl. Contoh No. 123, Kota Contoh, Indonesia
-          </p>
-  
-          <!-- Sosial Media -->
-          <div class="flex flex-col space-y-2 sm:space-y-4 mt-4 sm:mt-0">
-            <div class="flex items-center space-x-2 sm:space-x-3">
-              <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="h-5 sm:h-6" alt="Instagram" />
-              <a href="https://instagram.com/hasjogja" class="text-black hover:text-gray-900 dark:hover:text-black">
-                hasjogja
-              </a>
-            </div>
-            <div class="flex items-center space-x-2 sm:space-x-3">
-              <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" class="h-5 sm:h-6" alt="TikTok" />
-              <a href="https://www.tiktok.com/@hasjogja" class="text-black hover:text-gray-900 dark:hover:text-black">
-                hasjogja
-              </a>
-            </div>
-            <div class="flex items-center space-x-2 sm:space-x-3">
-              <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" class="h-5 sm:h-6" alt="WhatsApp" />
-              <a href="https://wa.me/6281234567890" class="text-black hover:text-gray-900 dark:hover:text-black">
-                +62 812-3456-7890
-              </a>
-            </div>
-            <div class="flex items-center space-x-2 sm:space-x-3">
-              <img src="https://cdn-icons-png.flaticon.com/512/732/732084.png" class="h-5 sm:h-6" alt="Shopee" />
-              <a href="https://shopee.co.id/hasjogja" class="text-black hover:text-gray-900 dark:hover:text-black">
-                shopee.co.id/hasjogja
-              </a>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Garis Pemisah -->
-        <hr class="my-5 border-gray-200 dark:border-gray-700" />
-  
-        <!-- Hak Cipta -->
-        <p class="text-center text-sm text-white ">
-          © 2025 <a href="#" class="hover:underline">Nama Brand™</a>. All Rights Reserved.
-        </p>
+   <!-- Footer -->
+<footer class="bg-[#ffa45b] shadow-sm mt-auto">
+  <div class="w-full max-w-screen-xl mx-auto p-5 sm:p-8">
+    <div class="flex flex-col sm:flex-row sm:justify-between items-center text-center sm:text-left">
+      <!-- Logo & Nama Brand -->
+      <div class="flex flex-col items-center sm:items-start space-y-2 sm:space-y-0">
+        <img src="https://res.cloudinary.com/dzbtekjvl/image/upload/v1739772278/HAS_logo_qqmiz0.png" class="h-8" alt="Brand Logo" />
+        <span class="text-lg sm:text-2xl font-medium font-glitten">Bag & Souvenir</span>
+        <span class="text-lg sm:text-2xl font-medium font-glitten">Production House</span>
       </div>
-    </footer>
-  
+
+      <!-- Alamat -->
+<div class="mt-4 sm:mt-0 text-center sm:text-left text-black text-sm sm:text-base">
+  <p class="font-semibold">
+    Karangjati Jl. Jatibaru 16/40 Sinduadi Mlati, Sleman, Yogyakarta 55284
+  </p>
+  <a href="https://maps.app.goo.gl/EPti7LrtpM3LiaXt9" 
+     target="_blank" 
+     class="mt-2 inline-flex items-center space-x-2 bg-white/70 rounded-full px-4 py-2 font-semibold text-blue-700 hover:text-gray-900 dark:hover:font-bold transition duration-300">
+    <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" class="h-5 sm:h-6" alt="Google Maps" />
+    <span>Lihat di Google Maps</span>
+  </a>
+</div>
+
+
+      <!-- Sosial Media -->
+      <div class="grid grid-cols-2 gap-2 sm:gap-4 mt-4 sm:mt-0">
+        <div class="flex items-center space-x-2 sm:space-x-3 bg-white/70 rounded-full px-3 py-2">
+          <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="h-5 sm:h-6" alt="Instagram" />
+          <a href="https://www.instagram.com/hasjogja.id" target="_blank" class="font-semibold hover:text-gray-900 dark:hover:font-bold">
+            Instagram
+          </a>
+        </div>
+        <div class="flex items-center space-x-2 sm:space-x-3 bg-white/70 rounded-full px-3 py-2">
+          <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" class="h-5 sm:h-6" alt="TikTok" />
+          <a href="https://www.tiktok.com/@hasjogja.id" target="_blank" class="font-semibold hover:text-gray-900 dark:hover:font-bold">
+            TikTok
+          </a>
+        </div>
+        <div class="flex items-center space-x-2 sm:space-x-3 bg-white/70 rounded-full px-3 py-2">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-5 sm:h-6" alt="WhatsApp" />
+          <a href="https://wa.me/6282115473265" target="_blank" class="font-semibold hover:text-gray-900 dark:hover:font-bold">
+            WhatsApp
+          </a>
+        </div>
+        <div class="flex items-center space-x-2 sm:space-x-3 bg-white/70 rounded-full px-3 py-2">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopee_logo.svg" class="h-5 sm:h-6" alt="Shopee" />
+          <a href="https://shopee.co.id/hasjogja" target="_blank" class="font-semibold hover:text-gray-900 dark:hover:font-bold">
+            Shopee
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Garis Pemisah -->
+    <hr class="my-5 border-gray-200 dark:border-gray-700" />
+
+    <!-- Hak Cipta -->
+    <p class="text-center text-sm text-white">
+      © 2025 <a href="#" target="_blank" class="hover:underline">Nama Brand™</a>. All Rights Reserved.
+    </p>
+  </div>
+</footer>
+
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/6281234567890" 
+    <a href="https://wa.me/6282115473265" target="_blank"
        class="fixed bottom-3 right-3 bg-green-500 p-2 sm:p-3 rounded-full shadow-lg flex items-center hover:scale-110 transition-transform">
       <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="h-8 sm:h-10">
     </a>
