@@ -1,33 +1,58 @@
 <!-- Katalog Produk -->
 <section class="bg-[#faf2e8] py-16">
-  <div class="container mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center mb-8 font-glitten">Katalog Produk</h2>
+  <div class="container mx-auto p-4">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-xl font-bold">Katalog Produk</h1>
+      <button 
+  (click)="toggleSortByLatest(false)" 
+  [disabled]="!sortByLatest" 
+  class="px-4 py-2 rounded" 
+  [class.bg-blue-500]="!sortByLatest" 
+  [class.bg-gray-300]="sortByLatest">
+  Default
+</button>
 
-    <!-- Grid Produk -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      @for (product of products; track product.id) {
-        <div class="bg-white p-4 shadow rounded-lg cursor-pointer" (click)="openModal(product)">
-          <img [src]="product.images[0]" alt="{{ product.name }}" class="h-40 md:h-48 w-full object-contain rounded-lg">
-          <p class="text-center mt-3 text-base md:text-lg font-medium font-glitten">{{ product.name }}</p>
-        </div>
-      }
+<button 
+  (click)="toggleSortByLatest(true)" 
+  [disabled]="sortByLatest" 
+  class="px-4 py-2 rounded" 
+  [class.bg-blue-500]="sortByLatest" 
+  [class.bg-gray-300]="!sortByLatest">
+  Terbaru
+</button>
+
     </div>
-
-    <!-- Tombol "Muat Lebih Banyak" & Scroll ke Atas -->
-    @if (!allLoaded || page >= 2) {
-      <div class="text-center mt-8 flex justify-center gap-4">
-        @if (!allLoaded) {
-          <button (click)="loadProducts()" class="bg-[#351C15]/70 text-white px-6 py-3 rounded-full shadow-md hover:bg-[#351C15]">
-            {{ isLoading ? 'Memuat...' : 'Muat Lebih Banyak' }}
-          </button>
-        }
-        @if (page >= 2) {
-          <button (click)="scrollToTop()" class="bg-gray-900/50 text-white px-3 py-2 rounded-full shadow-md hover:bg-gray-900 transition">
-            ⬆
-          </button>
-        }
+  
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div *ngFor="let product of products" class="border rounded-lg p-4 shadow-md">
+        <img 
+          *ngIf="product.images.length" 
+          [src]="product.images[0]" 
+          alt="{{ product.name }}" 
+          class="w-full h-48 object-cover rounded-md cursor-pointer"
+          (click)="openModal(product)">
+        
+        <h2 class="text-lg font-semibold mt-2">{{ product.name }}</h2>
+        <p class="text-sm text-gray-600">Mulai dari: Rp{{ product.basePrice | number }}</p>
+  
+        <button 
+          class="mt-2 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-900"
+          (click)="openModal(product)">
+          Lihat Detail
+        </button>
       </div>
-    }
+    </div>
+  
+    <div class="text-center mt-6">
+      <button 
+        *ngIf="!allLoaded && !isLoading" 
+        (click)="loadProducts()" 
+        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+        Muat Lebih Banyak
+      </button>
+      <p *ngIf="isLoading" class="mt-2 text-gray-600">Memuat...</p>
+      <p *ngIf="allLoaded" class="mt-2 text-gray-600">Semua produk telah dimuat</p>
+    </div>
   </div>
 </section>
 
