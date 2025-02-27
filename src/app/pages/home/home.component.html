@@ -9,14 +9,21 @@
       </div>
   
       <!-- Tombol Pesan Sekarang -->
-      <button class="group relative h-10 sm:h-12 overflow-hidden rounded-lg bg-[#23b33b] px-4 sm:px-6 text-neutral-50 transition hover:bg-[#57d063]">
-        <span class="relative font-semibold text-sm sm:text-base">Pesan Sekarang</span>
-        <div class="animate-shine-infinite absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full justify-center blur-[12px]">
-          <div class="relative h-full w-8"></div>
-        </div>
-      </button>
+      <a 
+        href="https://wa.me/6282115473265?text=Halo%20Has%20Jogja%20saya%20mau%20tanya-tanya%20produknya%20dong" 
+        target="_blank" 
+        rel="noopener noreferrer"
+      >
+        <button class="group relative h-10 sm:h-12 overflow-hidden rounded-lg bg-[#23b33b] px-4 sm:px-6 text-neutral-50 transition hover:bg-[#57d063]">
+          <span class="relative font-semibold text-sm sm:text-base">Pesan Sekarang</span>
+          <div class="animate-shine-infinite absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full justify-center blur-[12px]">
+            <div class="relative h-full w-8"></div>
+          </div>
+        </button>
+      </a>
     </div>
   </header>
+  
   
   
     <!-- Produk Unggulan -->
@@ -61,26 +68,39 @@
   </button>
 
   <!-- Desktop Text & Shop Button (Kanan Bawah) -->
-  <div class="absolute z-20 right-20 text-right hidden md:block">
-    <p class="text-4xl font-semibold font-glitten text-[#ffa45b] mb-2" >Bag & Souvenir <br> Production House</p>
+<div class="absolute z-20 right-20 text-right hidden md:block">
+  <p class="text-4xl font-semibold font-glitten text-[#ffa45b] mb-2">Bag & Souvenir <br> Production House</p>
+  <a 
+    href="https://wa.me/6282115473265?text=Halo%20Has%20Jogja%20saya%20mau%20tanya-tanya%20produknya%20dong" 
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
     <button
       class="py-2 hover:py-3 border bg-white/50 hover:bg-white font-regular hover:font-semibold drop-shadow-md hover:drop-shadow-md rounded-xl hover:rounded-2xl px-6 hover:px-7"
     >
       SHOP NOW
     </button>
-  </div>
+  </a>
+</div>
 
-  <!-- Mobile Text & Shop Button (Tengah Bawah) -->
-  <div class="absolute z-20 bottom-6 w-full flex justify-center md:hidden">
-    <div class="text-center">
-      <p class="text-lg font-medium font-glitten text-[#ffa45b] mb-1" >Bag & Souvenir <br> Production House</p>
+<!-- Mobile Text & Shop Button (Tengah Bawah) -->
+<div class="absolute z-20 bottom-6 w-full flex justify-center md:hidden">
+  <div class="text-center">
+    <p class="text-lg font-medium font-glitten text-[#ffa45b] mb-1">Bag & Souvenir <br> Production House</p>
+    <a 
+      href="https://wa.me/6282115473265?text=Halo%20Has%20Jogja%20saya%20mau%20tanya-tanya%20produknya%20dong" 
+      target="_blank" 
+      rel="noopener noreferrer"
+    >
       <button
         class="text-sm py-1 hover:py-2 border bg-white/80 hover:bg-white font-regular hover:font-semibold drop-shadow-md hover:drop-shadow-md rounded-md hover:rounded-lg px-2 hover:px-3"
       >
         SHOP NOW
       </button>
-    </div>
+    </a>
   </div>
+</div>
+
 
   <button
     (click)="nextImage(); stopAutoSlide(); startAutoSlide()"
@@ -97,21 +117,9 @@
   
         <!-- Produk Grid -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-4 sm:mt-6">
-          <div class="bg-gray-200 p-3 sm:p-4 rounded-lg shadow text-center">
-            <img src="assets/produk1.jpg" alt="Produk 1" class="w-full h-28 sm:h-40 object-cover rounded-lg">
-            <p class="mt-2 sm:mt-3 text-sm sm:text-lg font-semibold font-glitten">Nama Produk</p>
-          </div>
-          <div class="bg-gray-200 p-3 sm:p-4 rounded-lg shadow text-center">
-            <img src="assets/produk2.jpg" alt="Produk 2" class="w-full h-28 sm:h-40 object-cover rounded-lg">
-            <p class="mt-2 sm:mt-3 text-sm sm:text-lg font-semibold font-glitten">Nama Produk</p>
-          </div>
-          <div class="bg-gray-200 p-3 sm:p-4 rounded-lg shadow text-center">
-            <img src="assets/produk3.jpg" alt="Produk 3" class="w-full h-28 sm:h-40 object-cover rounded-lg">
-            <p class="mt-2 sm:mt-3 text-sm sm:text-lg font-semibold font-glitten">Nama Produk</p>
-          </div>
-          <div class="bg-gray-200 p-3 sm:p-4 rounded-lg shadow text-center">
-            <img src="assets/produk3.jpg" alt="Produk 3" class="w-full h-28 sm:h-40 object-cover rounded-lg">
-            <p class="mt-2 sm:mt-3 text-sm sm:text-lg font-semibold font-glitten">Nama Produk</p>
+          <div *ngFor="let product of products" class="bg-white/90 p-3 sm:p-4 rounded-lg shadow-md text-center">
+            <img [src]="product.urlGambar" [alt]="product.altGambar" class="w-full h-28 sm:h-40 object-contain rounded-lg">
+            <p class="mt-2 sm:mt-3 text-sm sm:text-lg font-semibold font-glitten">{{ product.altGambar }}</p>
           </div>
         </div>
       </div>
@@ -162,7 +170,8 @@
         </div>
         <div class="flex items-center space-x-2 sm:space-x-3 bg-white/70 rounded-full px-3 py-2">
           <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-5 sm:h-6" alt="WhatsApp" />
-          <a href="https://wa.me/6282115473265" target="_blank" class="font-semibold hover:text-gray-900 dark:hover:font-bold">
+          <a href="https://wa.me/6282115473265?text=Halo%20Has%20Jogja%20saya%20mau%20tanya-tanya%20produknya%20dong" 
+          target="_blank"  class="font-semibold hover:text-gray-900 dark:hover:font-bold">
             WhatsApp
           </a>
         </div>
@@ -186,7 +195,8 @@
 </footer>
 
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/6282115473265" target="_blank"
+    <a href="https://wa.me/6282115473265?text=Halo%20Has%20Jogja%20saya%20mau%20tanya-tanya%20produknya%20dong" 
+    target="_blank" 
        class="fixed bottom-3 right-3 bg-green-500 p-2 sm:p-3 rounded-full shadow-lg flex items-center hover:scale-110 transition-transform">
       <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="h-8 sm:h-10">
     </a>

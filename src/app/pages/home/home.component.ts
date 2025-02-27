@@ -4,6 +4,28 @@ import { KatalogComponent } from "../katalog/katalog.component";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, of, retry, timeout } from 'rxjs';
 
+// 2. Service untuk mengambil data dari API
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+export interface Product {
+  iid: number;
+  urlGambar: string;
+  altGambar: string;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ProductService {
+  private apiUrl = 'https://script.google.com/macros/s/AKfycbxQjQ_pKi-nYJ1GNOLlatB5kim7okPDXgSgVSICd6eXpCGxmUg04MFZNMqUZUPJWHfR/exec';
+  
+  constructor(private http: HttpClient) {}
+
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiUrl);
+  }
+}
 
 interface Imagess {
   urlGambar: string;
@@ -28,10 +50,15 @@ export class HomeComponent implements OnInit {
   images: Imagess[] = [];
   currentIndex = 0;
   slideOffset = 0;
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  products: Product[] = [];
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,private productService: ProductService) {}
+
   ngOnInit(): void {
     // Hanya fetch data jika di browser
-    
+    this.productService.getProducts().subscribe((data) => {
+      this.products = data.slice(0, 4); // Ambil 4 produk pertama
+    });
     if (isPlatformBrowser(this.platformId)) {
       this.fetchProducts();
     }

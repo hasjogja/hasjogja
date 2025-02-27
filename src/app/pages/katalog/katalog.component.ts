@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 interface Product {
   id: number;
@@ -19,96 +20,138 @@ interface Product {
   pricePrinting: number;
   priceThanksCard: number;
   notes: string;
-  status:string;
+  status: string;
   images: string[];
 }
 
 @Component({
   selector: 'app-katalog',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './katalog.component.html',
   styleUrls: ['./katalog.component.css']
 })
 export class KatalogComponent implements OnInit {
   products: Product[] = [];
+  filteredProducts: Product[] = [];
+  displayedProducts: Product[] = [];
   selectedProduct: Product | null = null;
   isModalOpen: boolean = false;
-  page: number = 1;
-  limit: number = 12;
-  isLoading: boolean = false;
-  allLoaded: boolean = false;
-  private defaultApiUrl = 'https://script.google.com/macros/s/AKfycbxWE3s_JCD2besdx0fHrV9f-b_xN2DQ0Q419d3ju3st1pldqUc335gK984aauP0b_CC/exec';
-  private latestApiUrl = 'https://script.google.com/macros/s/AKfycbxAAFG-pbrbLLn_ZctUbdXA32NwoUGA3zkE82J6PllZzKPHTuGrZE85taU-OH2iGDdu/exec';
-  apiUrl: string = this.defaultApiUrl;
   selectedImage: string = '';
-  sortByLatest: boolean = false;
+  itemsPerPage: number = 12;
+  currentPage: number = 1;
+  searchQuery: string = '';
+  selectedFilter: string = 'default';
+  hargaAscending: boolean = true;
+  Math = Math;
+
+  private apiUrl = 'https://script.google.com/macros/s/AKfycbxcxUZIU3yIs1f2FMhlBysejEW6xjTX72j8LyzByxQw4vlL19SfNw6WRxTZZ71b_dGN/exec';
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void {
-    this.loadProducts();
-  }
+  isLoading: boolean = true;
+isError: boolean = false;
 
-  loadProducts(): void {
-    if (this.isLoading || this.allLoaded) return;
-    
-    this.isLoading = true;
-  
-    // Jika menggunakan API default, tambahkan parameter page & limit
-    const apiUrlWithParams = this.apiUrl === this.defaultApiUrl
-      ? `${this.apiUrl}?page=${this.page}&limit=${this.limit}`
-      : this.apiUrl; // API terbaru tidak butuh page & limit
-  
-    this.http.get<any[]>(apiUrlWithParams).subscribe((data) => {
-      if (data.length === 0) {
-        this.allLoaded = true;
-      } else {
-        const mappedData: Product[] = data.map(item => ({
-          id: item.ID,
-          name: item["Nama Produk"],
-          material: item.Material,
-          size: item.Ukuran,
-          colors: item.Warna,
-          basePrice: item["Harga Dasar"],
-          price100: item["Harga 100-399"],
-          price400: item["Harga 400-699"],
-          price700: item["Harga 700-999"],
-          price1000: item["Harga 1000+"],
-          packaging: item.Kemasan,
-          addOns: item["Add-ons"],
-          priceLabel: item["Harga Label"],
-          pricePrinting: item["Harga Printing"],
-          priceThanksCard: item["Harga Thanks Card"],
-          notes: item.Catatan,
-          status : item.status,
-          images: [item["Url Gambar1"], item["Url Gambar 2"], item["Url Gambar 3 "]].filter(img => img)
-        }));
-  
-        // Jika API default, data ditambahkan (infinite scroll), jika API terbaru, langsung ganti data
-        this.products = this.apiUrl === this.defaultApiUrl ? [...this.products, ...mappedData] : mappedData;
-  
-        // Jika menggunakan API default, naikkan halaman
-        if (this.apiUrl === this.defaultApiUrl) {
-          this.page++;
-        }
-      }
+ngOnInit(): void {
+  this.loadProducts();
+
+  // Jika lebih dari 15 detik, tampilkan pesan error
+  setTimeout(() => {
+    if (this.isLoading) {
+      this.isError = true;
       this.isLoading = false;
-    });
+    }
+  }, 15000);
+}
+
+loadProducts(): void {
+  this.http.get<any[]>(this.apiUrl).subscribe((data) => {
+    this.products = data.map(item => ({
+      id: item.id,
+      name: item.namaProduk,
+      material: item.material,
+      size: item.ukuran,
+      colors: item.warna,
+      basePrice: item.hargaDasar,
+      price100: item.harga100_399,
+      price400: item.harga400_699,
+      price700: item.harga700_999,
+      price1000: item.harga1000Plus,
+      packaging: item.kemasan,
+      addOns: item.addOns,
+      priceLabel: item.hargaLabel,
+      pricePrinting: item.hargaPrinting,
+      priceThanksCard: item.hargaThanksCard,
+      notes: item.catatan,
+      status: item.status,
+      images: [item.urlGambar1, item.urlGambar2, item.urlGambar3].filter(img => img)
+    }));
+    
+    this.filteredProducts = [...this.products];
+    this.updateDisplayedProducts();
+    
+    this.isLoading = false;
+  }, error => {
+    this.isError = true;
+    this.isLoading = false;
+  });
+}
+
+  updateDisplayedProducts(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.displayedProducts = this.filteredProducts.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
-  toggleSortByLatest(latest: boolean): void {
-    if (this.sortByLatest === latest) return; // Cegah klik ulang
-  
-    this.sortByLatest = latest; // Set status sortByLatest
-    this.products = []; // Reset daftar produk
-    this.page = 1; // Reset pagination
-    this.allLoaded = false;
-  
-    this.apiUrl = latest ? this.latestApiUrl : this.defaultApiUrl; // Tentukan API
-    this.loadProducts(); // Load produk baru
+  setFilter(filter: string): void {
+    this.selectedFilter = filter;
+    if (filter === 'harga') {
+      this.hargaAscending = !this.hargaAscending;
+    }
+    this.applyFilters();
   }
-  
-  
+
+  applyFilters(): void {
+    let filtered = [...this.products];
+    if (this.searchQuery) {
+      const query = this.searchQuery.toLowerCase();
+      filtered = filtered.filter(product => product.name.toLowerCase().includes(query));
+    }
+    if (this.selectedFilter === 'terbaru') {
+      filtered.sort((a, b) => b.id - a.id);
+    } else if (this.selectedFilter === 'terlaris') {
+      filtered = filtered.filter(product => product.status.toLowerCase() === 'terlaris');
+    } else if (this.selectedFilter === 'harga') {
+      filtered.sort((a, b) => this.hargaAscending ? a.basePrice - b.basePrice : b.basePrice - a.basePrice);
+    }
+    this.filteredProducts = filtered;
+    this.currentPage = 1;
+    this.updateDisplayedProducts();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.updateDisplayedProducts();
+  }
+
+  getPaginationRange(): number[] {
+    const totalPages = this.totalPages;
+    const maxPagesToShow = 5;
+    const halfRange = Math.floor(maxPagesToShow / 2);
+
+    let start = Math.max(1, this.currentPage - halfRange);
+    let end = Math.min(totalPages, start + maxPagesToShow - 1);
+
+    if (end - start < maxPagesToShow - 1) {
+      start = Math.max(1, end - maxPagesToShow + 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
   openModal(product: Product): void {
     this.selectedProduct = product;
     this.selectedImage = product.images[0];

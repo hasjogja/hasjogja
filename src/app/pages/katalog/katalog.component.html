@@ -1,60 +1,91 @@
-<!-- Katalog Produk -->
 <section class="bg-[#faf2e8] py-16">
   <div class="container mx-auto p-4">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-xl font-bold">Katalog Produk</h1>
-      <button 
-  (click)="toggleSortByLatest(false)" 
-  [disabled]="!sortByLatest" 
-  class="px-4 py-2 rounded" 
-  [class.bg-blue-500]="!sortByLatest" 
-  [class.bg-gray-300]="sortByLatest">
-  Default
-</button>
+    <h1 class="text-2xl font-semibold font-glitten mb-4 text-center">Katalog Produk</h1>
 
-<button 
-  (click)="toggleSortByLatest(true)" 
-  [disabled]="sortByLatest" 
-  class="px-4 py-2 rounded" 
-  [class.bg-blue-500]="sortByLatest" 
-  [class.bg-gray-300]="!sortByLatest">
-  Terbaru
-</button>
+    <!-- Filter dan Pencarian -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        (input)="applyFilters()" 
+        placeholder="Cari produk..." 
+        class="p-2 border rounded-md w-full sm:w-1/3"
+      >
 
-    </div>
-  
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <div *ngFor="let product of products" class="border rounded-lg p-4 shadow-md">
-        <img 
-          *ngIf="product.images.length" 
-          [src]="product.images[0]" 
-          alt="{{ product.name }}" 
-          class="w-full h-48 object-cover rounded-md cursor-pointer"
-          (click)="openModal(product)">
-        
-        <h2 class="text-lg font-semibold mt-2">{{ product.name }}</h2>
-        <p class="text-sm text-gray-600">Mulai dari: Rp{{ product.basePrice | number }}</p>
-  
-        <button 
-          class="mt-2 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-900"
-          (click)="openModal(product)">
-          Lihat Detail
+      <div class="flex flex-wrap gap-2 mb-4">
+        <button (click)="setFilter('default')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'default'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">Semua</button>
+        <button (click)="setFilter('terbaru')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'terbaru'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">Terbaru</button>
+        <button (click)="setFilter('terlaris')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'terlaris'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">Terlaris</button>
+        <button (click)="setFilter('harga')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'harga'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">
+          Harga {{ hargaAscending ? '↑' : '↓' }}
         </button>
       </div>
     </div>
-  
-    <div class="text-center mt-6">
+
+   <!-- Animasi Loading -->
+<div *ngIf="isLoading" class="flex flex-col items-center justify-center min-h-[200px]">
+  <div class="w-12 h-12 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+  <p class="mt-2 text-lg font-semibold text-gray-700">Memuat data...</p>
+</div>
+
+<!-- Pesan Error Jika Gagal Memuat -->
+<div *ngIf="isError" class="text-center text-red-600 font-semibold min-h-[200px]">
+  <p>Cek koneksi internet Anda.</p>
+</div>
+
+<!-- Daftar Produk -->
+<div *ngIf="!isLoading && !isError" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+  <div *ngFor="let product of displayedProducts" class="border bg-white/80 rounded-lg p-4 shadow-md">
+    <img 
+      *ngIf="product.images.length" 
+      [src]="product.images[0]" 
+      alt="{{ product.name }}" 
+      class="w-full h-48 object-contain rounded-md cursor-pointer"
+      (click)="openModal(product)">
+    
+    <h2 class="text-md sm:text-md md:text-lg lg:text-lg font-semibold mt-2">{{ product.name }}</h2>
+    <p class="text-sm text-gray-600">Mulai dari: Rp{{ product.basePrice | number }}</p>
+
+    <button 
+      class="mt-2 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-900"
+      (click)="openModal(product)">
+      Lihat Detail
+    </button>
+  </div>
+</div>
+
+
+    <!-- Pagination -->
+    <div class="flex justify-center items-center space-x-2 mt-6">
       <button 
-        *ngIf="!allLoaded && !isLoading" 
-        (click)="loadProducts()" 
-        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-        Muat Lebih Banyak
+        (click)="changePage(currentPage - 1)" 
+        [disabled]="currentPage === 1" 
+        class="px-3 py-2 rounded bg-gray-300 hover:bg-gray-400"
+      >
+        &laquo;
       </button>
-      <p *ngIf="isLoading" class="mt-2 text-gray-600">Memuat...</p>
-      <p *ngIf="allLoaded" class="mt-2 text-gray-600">Semua produk telah dimuat</p>
+
+      <button 
+        *ngFor="let page of getPaginationRange()" 
+        (click)="changePage(page)"
+        [class.bg-[#fdd5c8]]="page === currentPage" 
+        class="px-3 py-2 rounded hover:bg-gray-400"
+      >
+        {{ page }}
+      </button>
+
+      <button 
+        (click)="changePage(currentPage + 1)" 
+        [disabled]="currentPage === totalPages" 
+        class="px-3 py-2 rounded bg-gray-300 hover:bg-gray-400"
+      >
+        &raquo;
+      </button>
     </div>
+
   </div>
 </section>
+
 
 <!-- Modal Detail Produk -->
 @if (isModalOpen) {
@@ -117,7 +148,7 @@
 
         <!-- Tombol Pesan via WhatsApp & Tutup -->
         <div class="mt-3 flex flex-col md:flex-row gap-3">
-          <a [href]="'https://wa.me/6281234567890?text=Halo,%20Has%20Jogja%20saya%20tertarik%20dengan%20produk%20' + encodeText(selectedProduct?.name)" 
+          <a [href]="'https://wa.me/6282115473265?text=Halo,%20Has%20Jogja%20saya%20tertarik%20dengan%20produk%20' + encodeText(selectedProduct?.name)" 
              target="_blank"
              class="bg-green-600 text-white px-4 sm:px-5 py-2 sm:py-2 rounded-lg shadow hover:bg-green-700 flex-1 text-center text-sm">
              Pesan via WhatsApp
