@@ -47,7 +47,7 @@
     <p class="text-sm text-gray-600">Mulai dari: Rp{{ product.basePrice | number }}</p>
 
     <button 
-      class="mt-2 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-900"
+      class="mt-2 w-full bg-[#fdd5c8] text-white py-2 rounded-md hover:bg-gray-900"
       (click)="openModal(product)">
       Lihat Detail
     </button>
@@ -92,7 +92,7 @@
   <div class="fixed inset-0 bg-white/80 flex justify-center items-center z-50 p-1 pt-16 overflow-y-auto max-h-screen">
     <div class="bg-white w-full sm:max-w-sm md:max-w-4xl p-4 sm:p-2 md:p-8 rounded-lg shadow-md relative flex flex-col md:flex-row">
       <!-- Kolom Gambar Produk -->
-      <div class="w-full md:w-1/2 flex flex-col items-center">
+      <div class="w-full md:w-1/2 flex flex-col items-center md:sticky md:top-0">
         <img [src]="selectedImage" alt="{{ selectedProduct?.name }}" 
              class="h-40 sm:h-32 md:h-48 w-full object-contain rounded-lg">
 
@@ -107,7 +107,7 @@
       </div>
 
       <!-- Kolom Detail Produk -->
-      <div class="w-full md:w-1/2 pl-4 md:pl-6 flex flex-col">
+      <div class="w-full md:w-1/2 pl-4 md:pl-6 flex flex-col overflow-y-auto max-h-[70vh]">
         <h2 class="text-lg md:text-2xl font-bold">{{ selectedProduct?.name }}</h2>
 
         <div class="mt-2 space-y-1 text-sm md:text-base">
@@ -145,21 +145,20 @@
           <p>Printing: Rp {{ selectedProduct?.pricePrinting }}</p>
           <p>Thanks Card: Rp {{ selectedProduct?.priceThanksCard }}</p>
         </div>
-
-        <!-- Tombol Pesan via WhatsApp & Tutup -->
-        <div class="mt-3 flex flex-col md:flex-row gap-3">
-          <a [href]="'https://wa.me/6282115473265?text=Halo,%20Has%20Jogja%20saya%20tertarik%20dengan%20produk%20' + encodeText(selectedProduct?.name)" 
-             target="_blank"
-             class="bg-green-600 text-white px-4 sm:px-5 py-2 sm:py-2 rounded-lg shadow hover:bg-green-700 flex-1 text-center text-sm">
-             Pesan via WhatsApp
-          </a>
-          
-          <button (click)="closeModal()" class="bg-red-200/50 text-red-600 sm:px-5 py-2 sm:py-2 rounded-lg shadow font-semibold hover:underline text-center flex-1 text-sm">
-            Tutup
-          </button>
-        </div>
       </div>
+    </div>
+
+    <!-- Tombol Pesan & Tutup -->
+    <div class="fixed bottom-0 left-0 w-full bg-white p-3 shadow-md flex flex-col md:flex-row gap-3">
+      <a [href]="'https://wa.me/6282115473265?text=Halo,%20Has%20Jogja%20saya%20tertarik%20dengan%20produk%20' + encodeText(selectedProduct?.name)" 
+         target="_blank"
+         class="bg-green-600 text-white px-4 sm:px-5 py-2 sm:py-2 rounded-lg shadow hover:bg-green-700 flex-1 text-center text-sm">
+         Pesan via WhatsApp
+      </a>
+      
+      <button (click)="closeModal()" class="bg-red-200/50 text-red-600 sm:px-5 py-2 sm:py-2 rounded-lg shadow font-semibold hover:underline text-center flex-1 text-sm">
+        Tutup
+      </button>
     </div>
   </div>
 }
-
