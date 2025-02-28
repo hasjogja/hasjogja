@@ -13,10 +13,10 @@
       >
 
       <div class="flex flex-wrap gap-2 mb-4">
-        <button (click)="setFilter('default')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'default'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">Semua</button>
-        <button (click)="setFilter('terbaru')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'terbaru'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">Terbaru</button>
-        <button (click)="setFilter('terlaris')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'terlaris'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">Terlaris</button>
-        <button (click)="setFilter('harga')"  [ngClass]="{'bg-[#fdd5c8] font-semibold': selectedFilter === 'harga'}" class="px-4 py-2 border rounded-md hover:bg-[#ffa45b]">
+        <button (click)="setFilter('default')"  [ngClass]="{'bg-[#ffa45b] font-semibold': selectedFilter === 'default'}" class="px-4 py-2 border rounded-md hover:bg-[#fdd5c8]">Semua</button>
+        <button (click)="setFilter('terbaru')"  [ngClass]="{'bg-[#ffa45b] font-semibold': selectedFilter === 'terbaru'}" class="px-4 py-2 border rounded-md hover:bg-[#fdd5c8]">Terbaru</button>
+        <button (click)="setFilter('terlaris')"  [ngClass]="{'bg-[#ffa45b] font-semibold': selectedFilter === 'terlaris'}" class="px-4 py-2 border rounded-md hover:bg-[#fdd5c8]">Terlaris</button>
+        <button (click)="setFilter('harga')"  [ngClass]="{'bg-[#ffa45b] font-semibold': selectedFilter === 'harga'}" class="px-4 py-2 border rounded-md hover:bg-[#fdd5c8]">
           Harga {{ hargaAscending ? '↑' : '↓' }}
         </button>
       </div>
@@ -47,7 +47,7 @@
     <p class="text-sm text-gray-600">Mulai dari: Rp{{ product.basePrice | number }}</p>
 
     <button 
-      class="mt-2 w-full bg-[#fdd5c8] text-white py-2 rounded-md hover:bg-gray-900"
+      class="mt-2 w-full bg-[#ffa45b] text-white py-2 rounded-md hover:bg-gray-900"
       (click)="openModal(product)">
       Lihat Detail
     </button>
