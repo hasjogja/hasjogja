@@ -86,18 +86,18 @@
   </div>
 </section>
 
-
 <!-- Modal Detail Produk -->
 @if (isModalOpen) {
   <div class="fixed inset-0 bg-white/80 flex justify-center items-center z-50 p-1 pt-16 overflow-hidden">
-    <div class="bg-white w-full sm:max-w-sm md:max-w-4xl p-4 sm:p-2 md:p-8 rounded-lg shadow-md relative flex flex-col md:flex-row">
+    <div class="bg-white w-full sm:max-w-sm md:max-w-4xl p-4 sm:p-2 md:p-6 rounded-lg shadow-md relative flex flex-col md:flex-row max-h-[90vh]">
+      
       <!-- Kolom Gambar Produk -->
       <div class="w-full md:w-1/2 flex flex-col items-center md:sticky md:top-0">
         <img [src]="selectedImage" alt="{{ selectedProduct?.name }}" 
-             class="h-40 sm:h-32 md:h-48 w-full object-contain rounded-lg">
+             class="w-full max-h-[40vh] object-contain rounded-lg">
 
         <!-- Galeri Thumbnail -->
-        <div class="flex gap-2 mt-4">
+        <div class="flex gap-2 mt-4 overflow-x-auto">
           @for (img of selectedProduct?.images; track $index) {
             <img [src]="img" alt="Thumbnail" 
                  class="h-12 w-12 md:h-16 md:w-16 object-contain rounded-lg cursor-pointer border-2 border-transparent hover:border-gray-400" 
@@ -108,7 +108,7 @@
 
       <!-- Kolom Detail Produk -->
       <div class="w-full md:w-1/2 pl-4 md:pl-6 flex flex-col overflow-hidden">
-        <div class="overflow-y-auto max-h-[70vh] pr-2">
+        <div class="overflow-y-auto flex-grow max-h-[60vh] pr-2">
           <h2 class="text-lg md:text-2xl font-bold">{{ selectedProduct?.name }}</h2>
 
           <div class="mt-2 space-y-1 text-sm md:text-base">
@@ -164,4 +164,5 @@
     </div>
   </div>
 }
+
 
