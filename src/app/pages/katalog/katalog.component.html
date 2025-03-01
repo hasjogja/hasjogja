@@ -89,7 +89,7 @@
 
 <!-- Modal Detail Produk -->
 @if (isModalOpen) {
-  <div class="fixed inset-0 bg-white/80 flex justify-center items-center z-50 p-1 pt-16 overflow-y-auto max-h-screen">
+  <div class="fixed inset-0 bg-white/80 flex justify-center items-center z-50 p-1 pt-16 overflow-hidden">
     <div class="bg-white w-full sm:max-w-sm md:max-w-4xl p-4 sm:p-2 md:p-8 rounded-lg shadow-md relative flex flex-col md:flex-row">
       <!-- Kolom Gambar Produk -->
       <div class="w-full md:w-1/2 flex flex-col items-center md:sticky md:top-0">
@@ -107,58 +107,61 @@
       </div>
 
       <!-- Kolom Detail Produk -->
-      <div class="w-full md:w-1/2 pl-4 md:pl-6 flex flex-col overflow-y-auto max-h-[70vh]">
-        <h2 class="text-lg md:text-2xl font-bold">{{ selectedProduct?.name }}</h2>
+      <div class="w-full md:w-1/2 pl-4 md:pl-6 flex flex-col overflow-hidden">
+        <div class="overflow-y-auto max-h-[70vh] pr-2">
+          <h2 class="text-lg md:text-2xl font-bold">{{ selectedProduct?.name }}</h2>
 
-        <div class="mt-2 space-y-1 text-sm md:text-base">
-          <p><strong>Material:</strong> {{ selectedProduct?.material }}</p>
-          <p><strong>Size:</strong> {{ selectedProduct?.size }}</p>
-          <p><strong>Colors:</strong> {{ selectedProduct?.colors }} Available</p>
-          <p><strong>Packaging:</strong> {{ selectedProduct?.packaging }}</p>
-          <p><strong>Add-Ons:</strong> {{ selectedProduct?.addOns }}</p>
-        </div>
+          <div class="mt-2 space-y-1 text-sm md:text-base">
+            <p><strong>Material:</strong> {{ selectedProduct?.material }}</p>
+            <p><strong>Size:</strong> {{ selectedProduct?.size }}</p>
+            <p><strong>Colors:</strong> {{ selectedProduct?.colors }} Available</p>
+            <p><strong>Packaging:</strong> {{ selectedProduct?.packaging }}</p>
+            <p><strong>Add-Ons:</strong> {{ selectedProduct?.addOns }}</p>
+          </div>
 
-        <div class="mt-2">
-          <p class="text-gray-600 text-xs md:text-sm italic">{{ selectedProduct?.notes }}</p>
-        </div>
+          <div class="mt-2">
+            <p class="text-gray-600 text-xs md:text-sm italic">{{ selectedProduct?.notes }}</p>
+          </div>
 
-        <!-- Harga Produk -->
-        <div class="mt-3 space-y-1">
-          <p class="text-lg md:text-xl font-bold text-green-600">Rp {{ selectedProduct?.basePrice }}</p>
-        </div>
+          <!-- Harga Produk -->
+          <div class="mt-3 space-y-1">
+            <p class="text-lg md:text-xl font-bold text-green-600">Rp {{ selectedProduct?.basePrice }}</p>
+          </div>
 
-        <!-- Harga Berdasarkan Jumlah -->
-        <div class="mt-2">
-          <p class="font-semibold text-sm md:text-base">Harga Grosir:</p>
-          <div class="grid grid-cols-2 gap-1 text-xs md:text-sm">
-            <p>100 - 399 pcs: Rp {{ selectedProduct?.price100 }}</p>
-            <p>400 - 699 pcs: Rp {{ selectedProduct?.price400 }}</p>
-            <p>700 - 999 pcs: Rp {{ selectedProduct?.price700 }}</p>
-            <p>1000+ pcs: Rp {{ selectedProduct?.price1000 }}</p>
+          <!-- Harga Berdasarkan Jumlah -->
+          <div class="mt-2">
+            <p class="font-semibold text-sm md:text-base">Harga Grosir:</p>
+            <div class="grid grid-cols-2 gap-1 text-xs md:text-sm">
+              <p>100 - 399 pcs: Rp {{ selectedProduct?.price100 }}</p>
+              <p>400 - 699 pcs: Rp {{ selectedProduct?.price400 }}</p>
+              <p>700 - 999 pcs: Rp {{ selectedProduct?.price700 }}</p>
+              <p>1000+ pcs: Rp {{ selectedProduct?.price1000 }}</p>
+            </div>
+          </div>
+
+          <!-- Harga Add-Ons -->
+          <div class="mt-2">
+            <p class="font-semibold text-sm md:text-base">Harga Add-Ons:</p>
+            <p>Label: Rp {{ selectedProduct?.priceLabel }}</p>
+            <p>Printing: Rp {{ selectedProduct?.pricePrinting }}</p>
+            <p>Thanks Card: Rp {{ selectedProduct?.priceThanksCard }}</p>
           </div>
         </div>
 
-        <!-- Harga Add-Ons -->
-        <div class="mt-2">
-          <p class="font-semibold text-sm md:text-base">Harga Add-Ons:</p>
-          <p>Label: Rp {{ selectedProduct?.priceLabel }}</p>
-          <p>Printing: Rp {{ selectedProduct?.pricePrinting }}</p>
-          <p>Thanks Card: Rp {{ selectedProduct?.priceThanksCard }}</p>
+        <!-- Tombol Pesan & Tutup -->
+        <div class="sticky bottom-0 bg-white p-3 shadow-md flex flex-col md:flex-row gap-3">
+          <a [href]="'https://wa.me/6282115473265?text=Halo,%20Has%20Jogja%20saya%20tertarik%20dengan%20produk%20' + encodeText(selectedProduct?.name)" 
+             target="_blank"
+             class="bg-green-600 text-white px-4 sm:px-5 py-2 sm:py-2 rounded-lg shadow hover:bg-green-700 flex-1 text-center text-sm">
+             Pesan via WhatsApp
+          </a>
+          
+          <button (click)="closeModal()" class="bg-red-200/50 text-red-600 sm:px-5 py-2 sm:py-2 rounded-lg shadow font-semibold hover:underline text-center flex-1 text-sm">
+            Tutup
+          </button>
         </div>
       </div>
     </div>
-
-    <!-- Tombol Pesan & Tutup -->
-    <div class="fixed bottom-0 left-0 w-full bg-white p-3 shadow-md flex flex-col md:flex-row gap-3">
-      <a [href]="'https://wa.me/6282115473265?text=Halo,%20Has%20Jogja%20saya%20tertarik%20dengan%20produk%20' + encodeText(selectedProduct?.name)" 
-         target="_blank"
-         class="bg-green-600 text-white px-4 sm:px-5 py-2 sm:py-2 rounded-lg shadow hover:bg-green-700 flex-1 text-center text-sm">
-         Pesan via WhatsApp
-      </a>
-      
-      <button (click)="closeModal()" class="bg-red-200/50 text-red-600 sm:px-5 py-2 sm:py-2 rounded-lg shadow font-semibold hover:underline text-center flex-1 text-sm">
-        Tutup
-      </button>
-    </div>
   </div>
 }
+
